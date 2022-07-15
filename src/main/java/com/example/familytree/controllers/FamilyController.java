@@ -16,14 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.familytree.model.Family;
+import com.example.familytree.model.FamilyMember;
+import com.example.familytree.model.Member;
 import com.example.familytree.model.Response;
+import com.example.familytree.services.FamilyMemberService;
 import com.example.familytree.services.FamilyService;
 
 @RestController
 @RequestMapping("/family")
 public class FamilyController {
     @Autowired
-    FamilyService service;
+    FamilyService familyService;
+    @Autowired
+    FamilyMemberService familyMemberService;
     
     @GetMapping()
     public ResponseEntity<Response<ArrayList<Family>>> getFamilys() {
@@ -31,7 +36,7 @@ public class FamilyController {
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.service.get();
+            var data = this.familyService.get();
             response.setSuccess(true);
             response.setData(data);
         }
@@ -50,7 +55,7 @@ public class FamilyController {
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.service.getById(id);
+            var data = this.familyService.getById(id);
             response.setSuccess(false);
             response.setData(data);
         }
@@ -69,7 +74,7 @@ public class FamilyController {
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.service.save(family);
+            var data = this.familyService.save(family);
             response.setSuccess(false);
             response.setData(data);
         }
@@ -89,7 +94,7 @@ public class FamilyController {
         try
         {
             family.setId(id);
-            var data = this.service.save(family);
+            var data = this.familyService.save(family);
             response.setSuccess(true);
             response.setData(data);
         }
@@ -108,7 +113,7 @@ public class FamilyController {
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.service.delete(id);
+            var data = this.familyService.delete(id);
             if(data == false)
             {
                 httpStatus = HttpStatus.NOT_FOUND;
@@ -123,5 +128,86 @@ public class FamilyController {
             httpStatus = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<Response<String>>(response, httpStatus);
+    }
+
+    @GetMapping(path = "/{id}/members")
+    public ResponseEntity<Response<ArrayList<FamilyMember>>> getMembers(@PathVariable("id") String id) {
+        var response = new Response<ArrayList<FamilyMember>>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try
+        {
+            var data = this.familyMemberService.getMembers(id);
+            response.setSuccess(true);
+            response.setData(data);
+        }
+        catch(Exception ex)
+        {
+            response.setSuccess(false);
+            response.setError(ex.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<Response<ArrayList<FamilyMember>>>(response, httpStatus);
+    }
+    
+    @GetMapping(path = "/member/{membershipId}")
+    public ResponseEntity<Response<FamilyMember>> getFamilyMember(@PathVariable("membershipId") String membershipId) {
+        var response = new Response<FamilyMember>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try
+        {
+            var data = this.familyMemberService.getById(membershipId).get();
+            response.setSuccess(true);
+            response.setData(data);
+        }
+        catch(Exception ex)
+        {
+            response.setSuccess(false);
+            response.setError(ex.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<Response<FamilyMember>>(response, httpStatus);
+    }
+
+    @PostMapping(path = "/{id}/addmember")
+    public ResponseEntity<Response<FamilyMember>> addMember(@PathVariable("id") String id, @RequestBody Member member) {
+        var response = new Response<FamilyMember>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try
+        {
+            var data = this.familyMemberService.addMember(id, member);
+            response.setSuccess(true);
+            response.setData(data);
+        }
+        catch(Exception ex)
+        {
+            response.setSuccess(false);
+            response.setError(ex.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<Response<FamilyMember>>(response, httpStatus);
+    }
+    
+    @PutMapping(path = "/member/{id}")
+    public ResponseEntity<Response<FamilyMember>> updateFamilyMember(@PathVariable("id") String id, @RequestBody FamilyMember member) {
+        var response = new Response<FamilyMember>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        try
+        {
+            if(member.getId() != null && !member.getId().equals(id))
+            {
+                throw new Exception("The member ID can not be different from the request ID");
+            }
+            member.setId(id);
+            var data = this.familyMemberService.save(member);
+            response.setSuccess(true);
+            response.setData(data);
+        }
+        catch(Exception ex)
+        {
+            response.setSuccess(false);
+            response.setError(ex.getMessage());
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<Response<FamilyMember>>(response, httpStatus);
     }
 }
