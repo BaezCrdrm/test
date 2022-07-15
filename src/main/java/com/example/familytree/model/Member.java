@@ -2,6 +2,9 @@ package com.example.familytree.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,16 +17,22 @@ import java.util.List;
 @Table(name="member")
 @NamedQuery(name="Member.findAll", query="SELECT m FROM Member m")
 public class Member implements Serializable {
-	private static final long serialVersionUID = 1L;
+	// private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name="id")
 	private String id;
 
+	@Column(name="avatar")
 	private String avatar;
 
 	@Temporal(TemporalType.DATE)
+	@Column(name="birthday")
 	private Date birthday;
 
+	@Column(name="description")
 	private String description;
 
 	//bi-directional many-to-one association to FamilyMember

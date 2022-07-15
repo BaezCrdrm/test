@@ -2,6 +2,9 @@ package com.example.familytree.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +20,9 @@ public class FamilyMember implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@Column(name="id")
 	private String id;
 
 	@Temporal(TemporalType.DATE)
