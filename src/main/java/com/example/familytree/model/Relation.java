@@ -5,8 +5,6 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 
 
@@ -23,23 +21,21 @@ public class Relation implements Serializable {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name="id")
 	private String id;
 
 	//bi-directional many-to-one association to FamilyMember
 	@OneToMany(mappedBy="relation")
-	@JsonIgnore
 	private List<FamilyMember> familyMembers;
 
 	//bi-directional many-to-one association to FamilyMember
 	@ManyToOne
-	@JoinColumn(name="firstMemberId")
-	@JsonIgnore
+	@JoinColumn(name="first_member_id")
 	private FamilyMember familyMember1;
 
 	//bi-directional many-to-one association to FamilyMember
 	@ManyToOne
-	@JoinColumn(name="secondMemberId")
-	@JsonIgnore
+	@JoinColumn(name="second_member_id")
 	private FamilyMember familyMember2;
 
 	public Relation() {
