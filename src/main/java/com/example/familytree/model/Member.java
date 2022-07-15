@@ -5,6 +5,8 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class Member implements Serializable {
 	private String description;
 
 	//bi-directional many-to-one association to FamilyMember
+	@JsonIgnore
 	@OneToMany(mappedBy="member")
 	private List<FamilyMember> familyMembers;
 
