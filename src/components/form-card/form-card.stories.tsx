@@ -32,12 +32,6 @@ Width.args = {
 export const Buttons = Template.bind({});
 Buttons.args = {
     title: "Hello world",
-    events: {
-        accept: {
-            event: () => alert("Accept")
-        },
-        close: {
-            event: () => alert("Close")
-        }
-    }
+    onAccept: () => alert("Accept"),
+    onClose: () => alert("Close")
 }

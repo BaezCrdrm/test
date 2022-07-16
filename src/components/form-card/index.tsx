@@ -4,7 +4,8 @@ import MaterialCard from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
-import { IEventProp } from '../utils/definitions';
+import CloseIcon from '@mui/icons-material/Close';
+import { CallbackFunction } from '../utils/definitions';
 import { Typography } from '@mui/material';
 
 interface IFormCardProps
@@ -12,11 +13,9 @@ interface IFormCardProps
     children: JSX.Element,
     title: string,
     width?: number | string,
-    events?: {
-        accept?: IEventProp,
-        cancel?: IEventProp,
-        close?: IEventProp,
-    }
+    onAccept?: CallbackFunction,
+    onCancel?: CallbackFunction,
+    onClose?: CallbackFunction
 }
 
 const getActionButton = (condition: boolean, title: string, event?: (...args: any[]) => void) => {
@@ -33,45 +32,36 @@ const getActionButton = (condition: boolean, title: string, event?: (...args: an
 }
 
 const Card = (props: IFormCardProps): JSX.Element => {
-    const [displayClose, setDisplayClose] = useState(true);
-
-    useEffect(() => {
-        const valClose = ((!props.events?.close) || (!props.events?.close?.avoid));
-        setDisplayClose(valClose);
-    }, []);
-
     const close = () => {
-        if(props.events?.close?.event)
-        {
-            props.events.close?.event();
-            return;
-        }
-
-        console.log("Card - Close");
+        if(props.onClose)
+            props.onClose();
     }
 
     return (
-        <MaterialCard sx={{ 
-            minWidth: 275, 
-            maxWidth: 800,
-            textAlign: "left",
-            width: props.width ? props.width : "auto"
-        }}>
-            <CardContent>
-                <div>
-                    <Typography variant="h5" component="div">
-                        {props.title}
-                    </Typography>
-                    {props.children}
+        <div className="w-full h-full sm:h-auto">
+            <div className="bg-blue-500 h-full sm:h-auto sm:pr-2 sm:pt-2 relative rounded-md">
+                <div className="absolute right-0 top-0 mr-2 mt-2">
+                    <button className="bg-gray-400 text-white opacity-80 rounded-full"
+                        onClick={close}>
+                        <CloseIcon />
+                    </button>
                 </div>
-            </CardContent>
 
-            <CardActions>
-                { getActionButton(displayClose, "Close", close) }
-                { getActionButton(props.events?.accept !== undefined, "Accept", props.events?.accept?.event) }
-                { getActionButton(props.events?.cancel !== undefined, "Cancel", props.events?.cancel?.event) }
-            </CardActions>
-        </MaterialCard>
+                <CardContent>
+                    <div>
+                        <Typography variant="h5" component="div">
+                            {props.title}
+                        </Typography>
+                        {props.children}
+                    </div>
+                </CardContent>
+
+                <CardActions>
+                    { getActionButton(props.onAccept !== undefined, "Accept", props.onAccept) }
+                    { getActionButton(props.onCancel !== undefined, "Cancel", props.onCancel) }
+                </CardActions>
+            </div>
+        </div>
     );
 }
 

@@ -1,3 +1,5 @@
+export type CallbackFunction = (...args: any[]) => void;
+
 export interface IEventProp 
 {
     name?: string,
@@ -6,5 +8,5 @@ export interface IEventProp
      * funciones que son ocupadas por default
      */
     avoid?: boolean,
-    event: (...args: any[]) => void;
+    event: CallbackFunction;
 }
