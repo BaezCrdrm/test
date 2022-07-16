@@ -6,6 +6,7 @@ interface ITreeModalProps
 {
     open: boolean,
     title: string,
+    children: JSX.Element,
     onAccept?: CallbackFunction,
     onCancel?: CallbackFunction,
     onClose?: CallbackFunction
@@ -34,10 +35,8 @@ const Modal = (props: ITreeModalProps) => {
             open={props.open}
             onClose={onClose}>
             <Box sx={style}>
-                <h2 id="parent-modal-title">Text in a modal</h2>
-                <p id="parent-modal-description">
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </p>
+                <h2 id="parent-modal-title">{props.title}</h2>
+                {props.children}
             </Box>
         </ReactModal>
     )
