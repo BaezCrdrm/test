@@ -1,0 +1,14 @@
+export interface ITreeNode 
+{
+    name: string,
+    children?: ITreeNode[],
+    attributes?: {
+        id: string,
+        level: number,
+        sequence: number,
+        memberOne: string,
+        dateMemberOne: string,
+        memberTwo: string,
+        dateMemberTwo: string,
+    }
+}
