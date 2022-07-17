@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.familytree.model.Family;
@@ -31,14 +32,23 @@ public class FamilyController {
     FamilyMemberService familyMemberService;
     
     @GetMapping()
-    public ResponseEntity<Response<ArrayList<Family>>> getFamilys() {
+    public ResponseEntity<Response<ArrayList<Family>>> getFamilies(@RequestParam(value = "name", defaultValue = "") String name) {
         var response = new Response<ArrayList<Family>>();
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.familyService.get();
-            response.setSuccess(true);
-            response.setData(data);
+            if(name.isEmpty())
+            {
+                var data = this.familyService.get();
+                response.setSuccess(true);
+                response.setData(data);
+            }
+            else
+            {
+                var data = this.familyService.findByName(name.trim());
+                response.setSuccess(true);
+                response.setData(data);
+            }
         }
         catch(Exception ex)
         {
@@ -131,14 +141,25 @@ public class FamilyController {
     }
 
     @GetMapping(path = "/{id}/members")
-    public ResponseEntity<Response<ArrayList<FamilyMember>>> getMembers(@PathVariable("id") String id) {
+    public ResponseEntity<Response<ArrayList<FamilyMember>>> getMembers(@PathVariable("id") String id, 
+        @RequestParam(value = "name", defaultValue = "") String name) 
+    {
         var response = new Response<ArrayList<FamilyMember>>();
         HttpStatus httpStatus = HttpStatus.OK;
         try
         {
-            var data = this.familyMemberService.getMembers(id);
-            response.setSuccess(true);
-            response.setData(data);
+            if(name.isEmpty())
+            {
+                var data = this.familyMemberService.getMembers(id);
+                response.setSuccess(true);
+                response.setData(data);
+            }
+            else
+            {
+                var data = this.familyMemberService.getByMemberName(id, name);
+                response.setSuccess(true);
+                response.setData(data);
+            }
         }
         catch(Exception ex)
         {

@@ -57,6 +57,11 @@ public class FamilyMemberService {
         return familyMemberRepository.findById(id);
     }
 
+    public ArrayList<FamilyMember> getByMemberName(String familyId, String memberName)
+    {
+        return familyMemberRepository.filterFamilyMembers(familyId, "%" + memberName + "%");
+    }
+
     public boolean delete(String id) {
         try {
             familyMemberRepository.deleteById(id);

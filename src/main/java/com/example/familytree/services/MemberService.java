@@ -25,6 +25,10 @@ public class MemberService {
     public Optional<Member> getById(String id) {
         return memberRepository.findById(id);
     }
+    
+    public ArrayList<Member> findByDescription(String description) {
+        return memberRepository.findByDescriptionLike("%" + description + "%");
+    }
 
     public boolean delete(String id) {
         try {

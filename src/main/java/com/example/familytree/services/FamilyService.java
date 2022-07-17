@@ -25,6 +25,10 @@ public class FamilyService {
     public Optional<Family> getById(String id) {
         return FamilyRepository.findById(id);
     }
+    
+    public ArrayList<Family> findByName(String name) {
+        return FamilyRepository.findByNameLike("%" + name + "%");
+    }
 
     public boolean delete(String id) {
         try {
