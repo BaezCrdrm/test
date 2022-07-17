@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { IMember } from "../../../lib/data/definitions";
+import { IFamilyMember, IMember } from "../../../lib/data/definitions";
 import FindAndSelect from "../base";
 import { format } from "date-fns"
 
@@ -8,7 +8,7 @@ interface IFindAndSelectUserProps
 {
     open: boolean,
     family?: string,
-    onSelect?: (member: IMember) => void,
+    onSelect?: (member: IMember | IFamilyMember) => void,
     onCancel?: () => void
 }
 

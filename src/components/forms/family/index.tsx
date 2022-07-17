@@ -4,13 +4,9 @@ import { useState } from "react";
 import Input from "../../input";
 import { postFamily } from "../../../lib/data";
 import { IFamily } from "../../../lib/data/definitions";
+import { IFormProps } from "../../utils/definitions";
 
-interface IFormFamilyProps
-{
-    onClose: () => void
-}
-
-const FormFamily = (props: IFormFamilyProps) => {
+const FormFamily = (props: IFormProps) => {
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [name, setName] = useState<string>();
     const [notes, setNotes] = useState<string>("");

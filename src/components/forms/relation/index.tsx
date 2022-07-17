@@ -2,20 +2,17 @@ import { Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { IFamily, IMember } from "../../../lib/data/definitions";
+import { IFamily, IFamilyMember, IMember, IRelation } from "../../../lib/data/definitions";
 import FindAndSelectFamily from "../../findandselect/family";
 import FindAndSelectMembers from "../../findandselect/members";
+import { IFormProps } from "../../utils/definitions";
+import { postRelation } from "../../../lib/data";
 
-interface IAlertData
-{
-    level: "error" | "warning" | "info" | "success";
-    data: string
-}
-
-const FormRelation = () => {
+const FormRelation = (props: IFormProps) => {
+    const [isSaving, setIsSaving] = useState<boolean>(false);
     const [selectedFamily, setSelectedFamily] = useState<IFamily>();
-    const [selectedFirstMember, setSelectedFirstMember] = useState<IMember>();
-    const [selectedSecondMember, setSelectedSecondMember] = useState<IMember>();
+    const [selectedFirstMember, setSelectedFirstMember] = useState<IFamilyMember>();
+    const [selectedSecondMember, setSelectedSecondMember] = useState<IFamilyMember>();
     
     const [openSelectFamily, setOpenSelectFamily] = useState(false);
     const [openSelectFirstMember, setOpenSelectFirstMember] = useState(false);
@@ -69,10 +66,42 @@ const FormRelation = () => {
         return false;
     }
 
-    const relate = () => {
+    const relate = async() => {
+        if(isSaving) return;
         if(!validate()) return;
+        if(!selectedFirstMember) return;
+        if(!selectedSecondMember) return;
+        if(!selectedFamily) return;
+        
+        let relation: IRelation | undefined;
 
+        try
+        {
+            setIsSaving(s => s = true);
+            relation = {
+                familyMember1: selectedFirstMember,
+                familyMember2: selectedSecondMember
+            }
+            
+            relation = await postRelation(relation);
+            
+            if(relation && relation.id)
+            {
+                const msg = "Relation has been made";
+                console.log(msg, relation);
+                alert(msg);
+            }
 
+            if(props.onClose)
+                props.onClose();
+        }
+        catch(error)
+        {
+            console.error("save", error);
+            alert("Could not add a new member");
+        }
+
+        setIsSaving(s => s = false);
     }
 
     return (
@@ -103,7 +132,7 @@ const FormRelation = () => {
                                 selectedFirstMember ?
                                 <div>
                                     <span>Selected </span>
-                                    <span>{selectedFirstMember.description}</span>
+                                    <span>{selectedFirstMember.member?.description}</span>
                                 </div>
                                 :
                                 <div></div>
@@ -119,7 +148,7 @@ const FormRelation = () => {
                                 selectedSecondMember ?
                                 <div>
                                     <span>Selected </span>
-                                    <span>{selectedSecondMember.description}</span>
+                                    <span>{selectedSecondMember.member?.description}</span>
                                 </div>
                                 :
                                 <div></div>

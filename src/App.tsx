@@ -35,7 +35,7 @@ const App = () => {
       case 1:
         setCardContent({
           title: "Member",
-          content: <FormMember />
+          content: <FormMember onClose={onCardClose} />
         });
         break;
       case 2:
@@ -47,7 +47,7 @@ const App = () => {
       case 3:
         setCardContent({
           title: "Relation",
-          content: <FormRelation />
+          content: <FormRelation onClose={onCardClose} />
         });
         break;
     

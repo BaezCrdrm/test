@@ -1,4 +1,4 @@
-import { IFamily, IMember, IRelation, IResponse } from "./definitions";
+import { IFamily, IFamilyMember, IMember, IRelation, IResponse } from "./definitions";
 import { get, post } from "./restApi";
 
 async function customSearch<T>(endpoint: string, functionName: string)
@@ -74,4 +74,14 @@ export async function postFamily(data: IFamily)
 export async function postMember(data: IMember)
 {
     return customPost("member", data, "postMember");
+}
+
+export async function postMemberToFamily(familyId: string, data: IMember)
+{
+    return customPost(`family/${familyId}/addmember`, data, "postMemberToFamily");
+}
+
+export async function postRelation(data: IRelation)
+{
+    return customPost(`post`, data, "postRelation");
 }

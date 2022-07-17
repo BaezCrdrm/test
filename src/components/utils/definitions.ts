@@ -10,3 +10,8 @@ export interface IEventProp
     avoid?: boolean,
     event: CallbackFunction;
 }
+
+export interface IFormProps
+{
+    onClose?: () => void
+}
