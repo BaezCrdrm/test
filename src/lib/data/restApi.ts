@@ -14,3 +14,9 @@ export function get(endpoint: string)
     const url = getUrl(endpoint);
     return axios.get(url);
 }
+
+export function post(endpoint: string, data: unknown)
+{
+    const url = getUrl(endpoint);
+    return axios.post(url, data);
+}
