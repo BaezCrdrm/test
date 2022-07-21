@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", cors(corsOptionsDelegate), ServerRouter);
-app.use("/api/", cors(corsOptionsDelegate), ApiRouter);
+app.use("/api", cors(corsOptionsDelegate), ApiRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req: any, res: any) => 
 {
