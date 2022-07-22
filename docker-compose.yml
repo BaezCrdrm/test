@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - db-vol:/var/lib/mysql
+      - ./db/database.sql:/docker-entrypoint-initdb.d/database.sql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpwd
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=familytree
+
+  # backend:
+  #   image: familytree
+  #   build: ./familytree
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - db
+
+  # frontend:
+  #   image: front
+  #   build: ./familytree-react
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - '.:/app'
+  #     - '/app/node_modules'
+  #   depends_on:
+  #     - backend
+
+volumes:
+  db-vol:

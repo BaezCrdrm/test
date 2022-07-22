@@ -1,0 +1,530 @@
+{
+	"info": {
+		"_postman_id": "1cfbe609-364c-416f-a626-023662dc5282",
+		"name": "Schiller test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4239606"
+	},
+	"item": [
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get all members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/member",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"member"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "la",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get member by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/member/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"member",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5b9e410e-fbaf-48c5-a62a-53aab04614a2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"avatar\": \"img96\",\n    \"birthday\": \"1993-08-28\",\n    \"description\": \"Lalo Baez\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/member",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put member",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"5b9e410e-fbaf-48c5-a62a-53aab04614a2\",\n    \"avatar\": \"img1\",\n    \"birthday\": \"1969-08-18\",\n    \"description\": \"Samuel\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/member/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"member",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5b9e410e-fbaf-48c5-a62a-53aab04614a2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete member",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/member/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"member",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "c382cc65-bcd0-4966-8b3b-43ca0744ca2a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Family",
+			"item": [
+				{
+					"name": "Get all family",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "7b018889-e0d9-4013-92c0-377b90aca259"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post family",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Baez\",\n    \"notes\": \"Familia Baez\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/family",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put family",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"4028a1818200622001820069a0430000\",\n    \"name\": \"Baez\",\n    \"notes\": \"Familia Baez Solis\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/family/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4028a1818200622001820069a0430000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete family",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4028a1818200622001820069a0430000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"d58bb723-dbba-4a66-a4e9-7855601a81e3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/family/:familyId/addmember",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								":familyId",
+								"addmember"
+							],
+							"variable": [
+								{
+									"key": "familyId",
+									"value": "7b018889-e0d9-4013-92c0-377b90aca259"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update member",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"bdb4a2fb-e7f7-479c-ac3c-5d2be695b0e9\",\n    \"member_id\": \"5b9e410e-fbaf-48c5-a62a-53aab04614a2\",\n    \"family_id\": \"7b018889-e0d9-4013-92c0-377b90aca259\",\n    \"union_date\": \"2022-07-21\",\n    \"rel_parent_id\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/family/member/:memberId",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								"member",
+								":memberId"
+							],
+							"variable": [
+								{
+									"key": "memberId",
+									"value": "bdb4a2fb-e7f7-479c-ac3c-5d2be695b0e9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Family members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family/:familyId/members",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								":familyId",
+								"members"
+							],
+							"variable": [
+								{
+									"key": "familyId",
+									"value": "7b018889-e0d9-4013-92c0-377b90aca259"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Family member by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family/member/:memberId",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								"member",
+								":memberId"
+							],
+							"variable": [
+								{
+									"key": "memberId",
+									"value": "bdb4a2fb-e7f7-479c-ac3c-5d2be695b0e9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Family member by ID Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family/member/:memberId",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family",
+								"member",
+								":memberId"
+							],
+							"variable": [
+								{
+									"key": "memberId",
+									"value": "bdb4a2fb-e7f7-479c-ac3c-5d2be695b0e9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Relation",
+			"item": [
+				{
+					"name": "Get all relation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/relation",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"relation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get relation by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/relation/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"relation",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "58490108-f391-490d-b2cc-2fe8b5b68a53"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post relation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"familyMember1\": {\n        \"id\": \"d92ca2ce-e935-4060-b64d-b93f97599b7a\"\n    },\n    \"familyMember2\": {\n        \"id\": \"a03e4126-2b8d-4b79-a060-6725575dd4f2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/relation",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"relation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put relation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"58490108-f391-490d-b2cc-2fe8b5b68a53\",\n    \"familyMember1\": {\n        \"id\": \"d92ca2ce-e935-4060-b64d-b93f97599b7a\",\n        \"unionDate\": 1657947600000,\n        \"family\": {\n            \"id\": \"6a2c08be-e469-4c95-993d-f3f29036885b\",\n            \"name\": \"Baez\",\n            \"notes\": \"Familia Baez\"\n        },\n        \"member\": {\n            \"id\": \"13b671be-92d9-4414-a958-a610d8862ec1\",\n            \"avatar\": \"img11\",\n            \"birthday\": -1222966800000,\n            \"description\": \"Ruth\"\n        },\n        \"relation\": null\n    },\n    \"familyMember2\": {\n        \"id\": \"a03e4126-2b8d-4b79-a060-6725575dd4f2\",\n        \"unionDate\": 1657947600000,\n        \"family\": {\n            \"id\": \"6a2c08be-e469-4c95-993d-f3f29036885b\",\n            \"name\": \"Baez\",\n            \"notes\": \"Familia Baez\"\n        },\n        \"member\": {\n            \"id\": \"2f4c089e-aa26-4dfa-8f74-3b8caa7a25e5\",\n            \"avatar\": \"img111\",\n            \"birthday\": 82015200000,\n            \"description\": \"Lalo Hernández\"\n        }\n    },\n    \"relation\": {\n        \"id\": \"fd8d3bd4-d775-4e09-9401-159b36849f72\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springhost}}/relation/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"relation",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "58490108-f391-490d-b2cc-2fe8b5b68a53"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete relation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/relation/:id",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"relation",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "fd8d3bd4-d775-4e09-9401-159b36849f72"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
