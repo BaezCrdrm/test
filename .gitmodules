@@ -2,11 +2,11 @@
 	path = backend-node
 	url = https://github.com/BaezCrdrm/test.git
 	branch = backend-node
-[submodule "frontend-react"]
-	path = frontend-react
-	url = https://github.com/BaezCrdrm/test.git
-	branch = frontend-react
 [submodule "backend-spring"]
 	path = backend-spring
 	url = https://github.com/BaezCrdrm/test.git
 	branch = backend-spring
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/BaezCrdrm/test.git
+	branch = frontend-react
