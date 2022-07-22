@@ -6,10 +6,15 @@ import cors from "cors";
 import ServerRouter from "./server/router";
 import ApiRouter from "./api/router";
 import logger from "./logger";
+import sequelize from "./db";
 
 // eslint-disable-next-line
 require("dotenv").config();
 const app = express();
+
+sequelize.authenticate()
+.then(() => logger.info("Connected to database"))
+.catch((error: unknown) => logger.error("Sequelize authenticate", {error}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,10 +23,9 @@ app.use("/api", cors(corsOptionsDelegate), ApiRouter);
 
 app.all("*", cors(corsOptionsDelegate), (req: any, res: any) => 
 {
-    const notFoundResp: IResponse = {
-        status: 404,
-        error: "This route does not exist",
-        error_code: "NOT_FOUND"
+    const notFoundResp: IResponse<unknown> = {
+        success: false,
+        error: "This route does not exist"
     };
     return res.status(404).send(notFoundResp);
 });

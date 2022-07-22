@@ -1,7 +1,12 @@
-export interface IResponse
+export interface IFindData<T>
 {
     status: number,
+    response: IResponse<T>
+}
+
+export interface IResponse<T>
+{
+    success: boolean,
     error?: string,
-    error_code?: string,
-    data?: any
+    data?: T
 }
