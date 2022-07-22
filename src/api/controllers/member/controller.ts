@@ -1,14 +1,26 @@
 import logger from "../../../logger";
-import { IFindData, IResponse } from "../../../definitions";
+import { IFindData } from "../../../definitions";
 import { member as Member, memberAttributes } from "../../../db/models/member";
 import { getErrorMessage } from "../../../utils/errorMessage";
+import { FindOptions, Op } from "sequelize";
 
-export async function getAllMembers(): Promise<IFindData<Member[]>>
+export async function getAllMembers(searchName?: string): Promise<IFindData<Member[]>>
 {
     let status = 200;
     try
     {
-        const resp = await Member.findAll();
+        let filter: FindOptions | undefined = undefined;
+        if(searchName)
+        {
+            filter = { 
+                where: { 
+                    description: { 
+                        [Op.like]: `%${searchName.trim()}%` 
+                    }
+                } 
+            }
+        }
+        const resp = await Member.findAll(filter);
         logger.debug("Members", resp);
 
         if(!resp)

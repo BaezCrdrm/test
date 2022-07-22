@@ -2,13 +2,25 @@ import logger from "../../../logger";
 import { IFindData } from "../../../definitions";
 import { family as Family, familyAttributes } from "../../../db/models/family";
 import { getErrorMessage } from "../../../utils/errorMessage";
+import { FindOptions, Op } from "sequelize";
 
-export async function getAllFamilies(): Promise<IFindData<Family[]>>
+export async function getAllFamilies(searchName?: string): Promise<IFindData<Family[]>>
 {
     let status = 200;
     try
     {
-        const resp = await Family.findAll();
+        let filter: FindOptions | undefined = undefined;
+        if(searchName)
+        {
+            filter = { 
+                where: { 
+                    name: { 
+                        [Op.like]: `%${searchName.trim()}%` 
+                    }
+                } 
+            }
+        }
+        const resp = await Family.findAll(filter);
         logger.debug("Families", resp);
 
         if(!resp)

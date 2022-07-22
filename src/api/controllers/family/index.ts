@@ -11,7 +11,8 @@ const router = Router();
 router.get("/", async(req, res) => {
     try
     {
-        const data: IFindData<unknown> = await getAllFamilies();
+        const searchName: string | undefined = req.query.name as string;
+        const data: IFindData<unknown> = await getAllFamilies(searchName);
         res.status(data.status).send(data.response);
     }
     catch(error)
