@@ -2,7 +2,7 @@ import { Router } from "express";
 import { memberAttributes } from "../../../db/models/member";
 import { IFindData, IResponse } from "../../../definitions";
 import { getErrorMessage } from "../../../utils/errorMessage";
-import { createMember, getAllMembers, getMember, updateMember } from "./controller";
+import { createMember, deleteMember, getAllMembers, getMember, updateMember } from "./controller";
 const router = Router();
 
 router.get("/", async(req, res) => {
@@ -64,6 +64,24 @@ router.put("/:id", async(req, res) => {
         const id = req.params.id
         const member = req.body as memberAttributes;
         const data: IFindData<unknown> = await updateMember(id, member);
+        res.status(data.status).send(data.response);
+    }
+    catch(error)
+    {
+        const msg = getErrorMessage(error);
+        const resp: IResponse<unknown> = {
+            success: false,
+            error: msg
+        }
+        res.status(500).send(resp);
+    }
+});
+
+router.delete("/:id", async(req, res) => {
+    try
+    {
+        const id = req.params.id
+        const data: IFindData<unknown> = await deleteMember(id);
         res.status(data.status).send(data.response);
     }
     catch(error)

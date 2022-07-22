@@ -153,3 +153,40 @@ export async function updateMember(id: string, member: memberAttributes): Promis
         }
     }
 }
+
+export async function deleteMember(id: string): Promise<IFindData<boolean>>
+{
+    let status = 200;
+    try
+    {        
+        const resp = await Member.destroy({ where: { id: id }});
+        logger.debug("Member", resp);
+
+        if(!(resp && resp === 1))
+        {
+            status = 400;
+            const msg = "Could not update member. Verify the object values and if it is not equals to the old object";
+            logger.error(msg, id);
+            throw new Error(msg);
+        }
+
+        return {
+            status: status,
+            response: {
+                success: true,
+                data: true
+            }
+        }
+    }
+    catch(error)
+    {
+        const msg = getErrorMessage(error);
+        return {
+            status: status,
+            response: {
+                success: false,
+                error: msg
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ export async function getAllFamilies(): Promise<IFindData<Family[]>>
     try
     {
         const resp = await Family.findAll();
-        logger.debug("Familys", resp);
+        logger.debug("Families", resp);
 
         if(!resp)
         {
@@ -138,6 +138,43 @@ export async function updateFamily(id: string, family: familyAttributes): Promis
             response: {
                 success: true,
                 data: family
+            }
+        }
+    }
+    catch(error)
+    {
+        const msg = getErrorMessage(error);
+        return {
+            status: status,
+            response: {
+                success: false,
+                error: msg
+            }
+        }
+    }
+}
+
+export async function deleteFamily(id: string): Promise<IFindData<boolean>>
+{
+    let status = 200;
+    try
+    {        
+        const resp = await Family.destroy({ where: { id: id }});
+        logger.debug("Family", resp);
+
+        if(!(resp && resp === 1))
+        {
+            status = 400;
+            const msg = "Could not delete family. Verify the object values and if it is not equals to the old object";
+            logger.error(msg, id);
+            throw new Error(msg);
+        }
+
+        return {
+            status: status,
+            response: {
+                success: true,
+                data: true
             }
         }
     }

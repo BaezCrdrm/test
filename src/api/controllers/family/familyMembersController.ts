@@ -1,15 +1,23 @@
 import logger from "../../../logger";
 import { IFindData } from "../../../definitions";
-import { relation as Relation, relationAttributes } from "../../../db/models/relation";
+import { family_members as FamilyMembers, family_membersAttributes as familyMembersAttributes } from "../../../db/models/family_members";
 import { getErrorMessage } from "../../../utils/errorMessage";
+import { family as Family } from "../../../db/models/family";
+import { memberAttributes } from "../../../db/models/member";
 
-export async function getAllRelations(): Promise<IFindData<Relation[]>>
+export async function getAllFamilyMembers(familyId: string): Promise<IFindData<FamilyMembers[]>>
 {
     let status = 200;
     try
     {
-        const resp = await Relation.findAll();
-        logger.debug("Relations", resp);
+        const resp = await FamilyMembers.findAll({
+            include: [{
+                model: Family,
+                as: "family"
+            }],
+            where: { family_id: familyId }
+        });
+        logger.debug("Family members", resp);
 
         if(!resp)
         {
@@ -27,6 +35,7 @@ export async function getAllRelations(): Promise<IFindData<Relation[]>>
     }
     catch(error)
     {
+        if(status == 200) status = 500;
         const msg = getErrorMessage(error);
         return {
             status: status,
@@ -38,18 +47,24 @@ export async function getAllRelations(): Promise<IFindData<Relation[]>>
     }
 }
 
-export async function getRelation(id: string): Promise<IFindData<Relation>>
+export async function getFamilyMember(familyMemberId: string): Promise<IFindData<FamilyMembers>>
 {
     let status = 200;
     try
     {
-        const resp = await Relation.findOne({ where: { id: id } });
-        logger.debug("Relation", resp);
+        const resp = await FamilyMembers.findOne({
+            include: [{
+                model: Family,
+                as: "family"
+            }],
+            where: { id: familyMemberId }
+        });
+        logger.debug("Family members", resp);
 
         if(!resp)
         {
             status = 404;
-            throw new Error(`Could not find any value with id ${id}`);
+            throw new Error("Could not find any values");
         }
 
         return {
@@ -62,6 +77,7 @@ export async function getRelation(id: string): Promise<IFindData<Relation>>
     }
     catch(error)
     {
+        if(status == 200) status = 500;
         const msg = getErrorMessage(error);
         return {
             status: status,
@@ -73,19 +89,24 @@ export async function getRelation(id: string): Promise<IFindData<Relation>>
     }
 }
 
-export async function createRelation(relation: relationAttributes): Promise<IFindData<relationAttributes>>
+export async function addMemberToFamily(familyId: string, member: memberAttributes): Promise<IFindData<familyMembersAttributes>>
 {
     let status = 200;
     try
     {
-        const resp = await Relation.create(relation);
-        logger.debug("Relation", resp);
+        const info = {
+            family_id: familyId,
+            member_id: member.id, 
+            union_date: (new Date()).toISOString()
+        }
+        const resp = await FamilyMembers.create(info as familyMembersAttributes);
+        logger.debug("Family members", resp);
 
         if(!resp)
         {
             status = 400;
-            const msg = "Could not create relation";
-            logger.error(msg, relation);
+            const msg = "Could not create family";
+            logger.error(msg, info);
             throw new Error(msg);
         }
 
@@ -110,26 +131,26 @@ export async function createRelation(relation: relationAttributes): Promise<IFin
     }
 }
 
-export async function updateRelation(id: string, relation: relationAttributes): Promise<IFindData<relationAttributes>>
+export async function updateFamilyMember(id: string, family: familyMembersAttributes): Promise<IFindData<familyMembersAttributes>>
 {
     let status = 200;
     try
     {
-        if(!relation.id) relation.id = id;
-        else if(id !== relation.id) 
+        if(!family.id) family.id = id;
+        else if(id !== family.id) 
         {
             status = 400;
             throw new Error("The payload id is not equals to the API update id");
         }
         
-        const resp = await Relation.update(relation, { where: { id: id }});
-        logger.debug("Relation", resp);
+        const resp = await FamilyMembers.update(family, { where: { id: id }});
+        logger.debug("Family member", resp);
 
         if(!(Array.isArray(resp) && resp.length > 0 && resp[0] == 1))
         {
             status = 400;
-            const msg = "Could not update relation. Verify the object values and if it is not equals to the old object";
-            logger.error(msg, relation);
+            const msg = "Could not update family member. Verify the object values and if it is not equals to the old object";
+            logger.error(msg, family);
             throw new Error(msg);
         }
 
@@ -137,7 +158,7 @@ export async function updateRelation(id: string, relation: relationAttributes): 
             status: status,
             response: {
                 success: true,
-                data: relation
+                data: family
             }
         }
     }
@@ -154,18 +175,18 @@ export async function updateRelation(id: string, relation: relationAttributes): 
     }
 }
 
-export async function deleteRelation(id: string): Promise<IFindData<boolean>>
+export async function deleteFamilyMember(id: string): Promise<IFindData<boolean>>
 {
     let status = 200;
     try
     {        
-        const resp = await Relation.destroy({ where: { id: id }});
-        logger.debug("Relation", resp);
+        const resp = await FamilyMembers.destroy({ where: { id: id }});
+        logger.debug("Family member", resp);
 
         if(!(resp && resp === 1))
         {
             status = 400;
-            const msg = "Could not update relation. Verify the object values and if it is not equals to the old object";
+            const msg = "Could not delete family member. Verify the object values and if it is not equals to the old object";
             logger.error(msg, id);
             throw new Error(msg);
         }
