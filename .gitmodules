@@ -1,0 +1,6 @@
+[submodule "familytree-node"]
+	branch = backend-node
+[submodule "familytree-spring"]
+	branch = backend-spring
+[submodule "familytree-react"]
+	branch = frontend
