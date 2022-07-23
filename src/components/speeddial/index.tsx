@@ -14,10 +14,10 @@ interface ISpeeddialProps
 }
 
 const actions = [
-    { icon: <PersonIcon />, name: "New member", id: 1 },
+    { icon: <HowToRegIcon />, name: "Select family", id: 4 },
     { icon: <GroupsIcon />, name: "New Family", id: 2 },
-    { icon: <ConnectWithoutContactIcon />, name: "Relate with", id: 3 },
-    { icon: <HowToRegIcon />, name: "Select family", id: 4 }
+    { icon: <PersonIcon />, name: "New member", id: 1 },
+    { icon: <ConnectWithoutContactIcon />, name: "Relate with", id: 3 }
   ];
 
 const SpeedDial = (props: ISpeeddialProps) => {

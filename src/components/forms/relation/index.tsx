@@ -1,16 +1,17 @@
 import { Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { IFamily, IFamilyMember, IMember, IRelation } from "../../../lib/data/definitions";
+import { useState } from "react";
+import { IFamily, IFamilyMember, IRelation } from "../../../lib/data/definitions";
 import FindAndSelectFamily from "../../findandselect/family";
 import FindAndSelectMembers from "../../findandselect/members";
 import { IFormProps } from "../../utils/definitions";
 import { postRelation } from "../../../lib/data";
+import Store from "../../../lib/manager";
 
 const FormRelation = (props: IFormProps) => {
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    const [selectedFamily, setSelectedFamily] = useState<IFamily>();
+    const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(Store.selectedFamily);
     const [selectedFirstMember, setSelectedFirstMember] = useState<IFamilyMember>();
     const [selectedSecondMember, setSelectedSecondMember] = useState<IFamilyMember>();
     
@@ -111,17 +112,17 @@ const FormRelation = (props: IFormProps) => {
                     {
                         selectedFamily ?
                         <div>
-                            <span>Selected </span>
+                            <span>Selected family: </span>
                             <span>{selectedFamily.name}</span>
                         </div>
                         :
                         <div></div>
                     }
-                    <Button title="Family"
+                    {/* <Button title="Family"
                         variant="contained"
                         onClick={() => closeModalsAndOpen(setOpenSelectFamily)} >
                         Select family
-                    </Button>
+                    </Button> */}
                 </div>
 
                 {

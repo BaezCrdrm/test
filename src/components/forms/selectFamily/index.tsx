@@ -65,7 +65,7 @@ const FormSelectFamily = (props: IFormSelectFamilyProps) => {
                     <Button title="Save"
                         variant="contained"
                         onClick={select} >
-                        Select
+                        Accept
                     </Button>
                     :
                     <div></div>

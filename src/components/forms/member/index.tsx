@@ -9,15 +9,9 @@ import { IFormProps } from "../../utils/definitions";
 import FindAndSelectMembers from "../../findandselect/members";
 import Store from "../../../lib/manager";
 
-const defaultSelected = {
-    id: "d5ca8bc3-49de-423d-a4e3-b8f1cc2ef600", 
-    name: "Baez", 
-    notes: "Familia Baez"
-}
-
 const FormMember = (props: IFormProps) => {
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    const [selectedFamily, setSelectedFamily] = useState<IFamily>(defaultSelected);
+    const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(Store.selectedFamily);
     const [openSelectFamily, setOpenSelectFamily] = useState(false);
     const [selectedParent, setSelectedParent] = useState<IFamilyMember>();
     const [openSelectParent, setOpenSelectParent] = useState(false);
@@ -110,17 +104,17 @@ const FormMember = (props: IFormProps) => {
             {
                 selectedFamily ?
                 <div>
-                    <span>Selected </span>
+                    <span>Selected family: </span>
                     <span>{selectedFamily.name}</span>
                 </div>
                 :
                 <div></div>
             }
-            <Button title="Family"
+            {/* <Button title="Family"
                 variant="contained"
                 onClick={() => setOpenSelectFamily(true)} >
                 Select family
-            </Button>
+            </Button> */}
 
             {
                 selectedFamily ? 
@@ -154,7 +148,7 @@ const FormMember = (props: IFormProps) => {
                         <Button title="Parent"
                             variant="contained"
                             onClick={() => closeModalsAndOpen(setOpenSelectParent)} >
-                            Select parent
+                            Select parent (optional)
                         </Button>
                     </div>
 

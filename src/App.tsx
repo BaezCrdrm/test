@@ -8,7 +8,7 @@ import FormRelation from "./components/forms/relation";
 import FormSelectFamily from "./components/forms/selectFamily";
 import SpeedDial from "./components/speeddial";
 import Tree from "./components/tree";
-import Store, { setRelations, setMembers } from "./lib/manager";
+import Store, { setRelations, setMembers, setSelectedFamily as globalSelectedFamily } from "./lib/manager";
 import { ITreeNode } from "./components/tree/definitions";
 import { IFamily, IFamilyMember } from "./lib/data/definitions";
 import { getAllRelations, getFamilyMembers } from "./lib/data";
@@ -20,18 +20,10 @@ interface ICardContent
   content: JSX.Element
 }
 
-const defaultSelected = {
-  id: "d5ca8bc3-49de-423d-a4e3-b8f1cc2ef600", 
-  name: "Baez", 
-  notes: "Familia Baez"
-}
-
 const App = () => {
   const [cardContent, setCardContent] = useState<ICardContent>();
-  const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(defaultSelected);
+  const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(Store.selectedFamily);
   const [nodes, setNodes] = useState<ITreeNode[]>();
-  const [relationsLoaded, setRelationsLoaded] = useState(false);
-  const [data, setData] = useState<ITreeNode>();
 
   const cleanFormContent = () => setCardContent(undefined);
 
@@ -63,7 +55,7 @@ const App = () => {
       case 4:
         setCardContent({
           title: "Family",
-          content: <FormSelectFamily onSelect={setSelectedFamily} 
+          content: <FormSelectFamily onSelect={selectFamily} 
             selectedFamily={selectedFamily}
             onClose={onCardClose} />
         });
@@ -73,6 +65,11 @@ const App = () => {
         cleanFormContent();
         break;
     }
+  }
+
+  const selectFamily = (family: IFamily) => {
+    globalSelectedFamily(family);
+    setSelectedFamily(family);
   }
 
   const loadInfo = async() => 
