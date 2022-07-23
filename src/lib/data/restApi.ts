@@ -20,3 +20,9 @@ export function post(endpoint: string, data: unknown)
     const url = getUrl(endpoint);
     return axios.post(url, data);
 }
+
+export function put(endpoint: string, data: unknown)
+{
+    const url = getUrl(endpoint);
+    return axios.put(url, data);
+}

@@ -1,5 +1,5 @@
 import { IFamily, IFamilyMember, IMember, IRelation, IResponse } from "./definitions";
-import { get, post } from "./restApi";
+import { get, post, put } from "./restApi";
 
 async function customSearch<T>(endpoint: string, functionName: string)
 {
@@ -21,11 +21,15 @@ async function customSearch<T>(endpoint: string, functionName: string)
     return undefined;
 }
 
-async function customPost<T>(endpoint: string, newData: T, functionName: string)
+async function customSave<T>(endpoint: string, newData: T, functionName: string, update = false)
 {
     try
     {
-        const resp = await post(endpoint, newData);
+        let resp;
+        if(update)
+            resp = await put(endpoint, newData);
+        else
+            resp = await post(endpoint, newData);
         if(resp.status !== 200)
             console.warn("Response is not ok", resp);
          
@@ -117,20 +121,26 @@ export async function getFamilyMembers(familyId: string, name?: string)
 
 export async function postFamily(data: IFamily)
 {
-    return customPost("family", data, "saveFamily");
+    return customSave("family", data, "saveFamily");
 }
 
 export async function postMember(data: IMember)
 {
-    return customPost("member", data, "postMember");
+    return customSave("member", data, "postMember");
 }
 
-export async function postMemberToFamily(familyId: string, data: IMember)
+export async function postMemberToFamily(familyId: string, data: IMember): Promise<IFamilyMember | undefined>
 {
-    return customPost(`family/${familyId}/addmember`, data, "postMemberToFamily");
+    return customSave(`family/${familyId}/addmember`, data, "postMemberToFamily") as Promise<IFamilyMember | undefined>;
 }
 
 export async function postRelation(data: IRelation)
 {
-    return customPost(`relation`, data, "postRelation");
+    return customSave(`relation`, data, "postRelation");
+}
+
+export async function updateFamilyMember(member: IFamilyMember)
+{
+    if(!member.id) throw new Error("Could not get member ID");
+    return customSave(`family/member/${member.id}`, member, "updateFamilyMember", true);
 }

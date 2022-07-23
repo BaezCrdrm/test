@@ -3,14 +3,24 @@ import { useState } from "react";
 import { Button, TextField } from "@mui/material";
 import Input from "../../input";
 import FindAndSelectFamily from "../../findandselect/family";
-import { IFamily, IMember } from "../../../lib/data/definitions";
-import { postMember, postMemberToFamily } from "../../../lib/data";
+import { IFamily, IFamilyMember, IMember } from "../../../lib/data/definitions";
+import { postMember, postMemberToFamily, updateFamilyMember } from "../../../lib/data";
 import { IFormProps } from "../../utils/definitions";
+import FindAndSelectMembers from "../../findandselect/members";
+import Store from "../../../lib/manager";
+
+const defaultSelected = {
+    id: "d5ca8bc3-49de-423d-a4e3-b8f1cc2ef600", 
+    name: "Baez", 
+    notes: "Familia Baez"
+}
 
 const FormMember = (props: IFormProps) => {
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    const [selectedFamily, setSelectedFamily] = useState<IFamily>();
+    const [selectedFamily, setSelectedFamily] = useState<IFamily>(defaultSelected);
     const [openSelectFamily, setOpenSelectFamily] = useState(false);
+    const [selectedParent, setSelectedParent] = useState<IFamilyMember>();
+    const [openSelectParent, setOpenSelectParent] = useState(false);
     const closeAndSelect = (value: any, setter: (args: any) => void, closer: (args: any) => void) => {
         setter(value);
         closer(false);
@@ -37,15 +47,35 @@ const FormMember = (props: IFormProps) => {
             }
             
             member = await postMember(member);
+            let familyMember;
             
             if(member && member.id)
             {
-                const mf = await addToFamily(member, selectedFamily);
-                console.log("Member in family", mf);
+                familyMember = await addToFamily(member, selectedFamily);
+                console.log("Member in family", familyMember);
 
                 const msg = "Member has been created";
                 console.log(msg, member);
                 alert(msg);
+            }
+
+            if(selectedParent && familyMember)
+            {
+                const fr = Store.relations
+                    .find(r => r.familyMember1?.id === selectedParent.id || 
+                        r.familyMember2?.id === selectedParent.id);
+                if(fr)
+                {
+                    console.log("save", fr);
+                    familyMember.rel_parent_id = fr.id;
+                    familyMember = await updateFamilyMember(familyMember);
+                    if(!familyMember?.rel_parent_id)
+                    {
+                        const msg = "Could not add member as a child";
+                        console.error(msg, familyMember);
+                        alert(msg);
+                    }
+                }
             }
 
             if(props.onClose)
@@ -67,6 +97,12 @@ const FormMember = (props: IFormProps) => {
 
     const setDate = (e: any) => {
         setBirthday(new Date(e.target.value));
+    }
+
+    const closeModalsAndOpen = (setter: (args: any) => void) => {
+        setOpenSelectFamily(val => val = false);
+        setOpenSelectParent(val => val = false);
+        setter(true);
     }
     
     return (
@@ -106,6 +142,23 @@ const FormMember = (props: IFormProps) => {
                     <Input title="Avatar URL" name="avatar" onChange={e => setAvatar(e.target.value)} />
 
                     <div className="mt-4">
+                        {
+                            selectedParent ?
+                            <div>
+                                <span>Selected </span>
+                                <span>{selectedParent.member?.description}</span>
+                            </div>
+                            :
+                            <div></div>
+                        }
+                        <Button title="Parent"
+                            variant="contained"
+                            onClick={() => closeModalsAndOpen(setOpenSelectParent)} >
+                            Select parent
+                        </Button>
+                    </div>
+
+                    <div className="mt-4">
                         <Button title="Save" variant="contained" style={{
                             outlineColor: "white"
                             }}
@@ -122,6 +175,11 @@ const FormMember = (props: IFormProps) => {
                 open={openSelectFamily} 
                 onSelect={(family) => closeAndSelect(family, setSelectedFamily, setOpenSelectFamily)}
                 onCancel={() => setOpenSelectFamily(false)} />
+            <FindAndSelectMembers 
+                open={openSelectParent} 
+                family={selectedFamily?.id} 
+                onSelect={(member) => closeAndSelect(member, setSelectedParent, setOpenSelectParent)}
+                onCancel={() => setOpenSelectParent(false)} />
         </form>
     )
 }
