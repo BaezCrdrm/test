@@ -10,3 +10,16 @@ export interface IResponse<T>
     error?: string,
     data?: T
 }
+
+interface ISpringFamilyMember
+{
+    id: string,
+    [key: string]: unknown
+}
+
+export interface ISpringRelation
+{
+    id: string,
+    familyMember1: ISpringFamilyMember
+    familyMember2: ISpringFamilyMember
+}

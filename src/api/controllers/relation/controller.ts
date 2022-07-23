@@ -28,6 +28,8 @@ export async function getAllRelations(): Promise<IFindData<Relation[]>>
     catch(error)
     {
         const msg = getErrorMessage(error);
+        if(status == 200) status = 500;
+        logger.error("getAllRelations", {error: msg});
         return {
             status: status,
             response: {
@@ -100,6 +102,8 @@ export async function createRelation(relation: relationAttributes): Promise<IFin
     catch(error)
     {
         const msg = getErrorMessage(error);
+        logger.error("createRelation", msg);
+        if(status == 200) status = 500;
         return {
             status: status,
             response: {

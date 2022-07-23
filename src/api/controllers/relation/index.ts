@@ -2,6 +2,7 @@ import { Router } from "express";
 import { relationAttributes } from "../../../db/models/relation";
 import { IFindData, IResponse } from "../../../definitions";
 import { getErrorMessage } from "../../../utils/errorMessage";
+import { springRelationToRelation } from "../../../utils/springConvert";
 import { createRelation, getAllRelations, getRelation, updateRelation } from "./controller";
 const router = Router();
 
@@ -43,8 +44,10 @@ router.get("/:id", async(req, res) => {
 router.post("/", async(req, res) => {
     try
     {
-        const family = req.body as relationAttributes;
-        const data: IFindData<unknown> = await createRelation(family);
+        let family = req.body;
+        if(family.familyMember1)
+            family = springRelationToRelation(family) as relationAttributes;
+        const data: IFindData<unknown> = await createRelation(family as relationAttributes);
         res.status(data.status).send(data.response);
     }
     catch(error)

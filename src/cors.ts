@@ -1,6 +1,8 @@
 import { CorsOptions } from "cors";
 
-const allowedOrigins: string[] = [];
+const allowedOrigins: string[] = [
+
+];
 
 /**
  * Revisa si el origen de la petición se encuentra en la lista
@@ -30,7 +32,8 @@ function checkRequestOrigin(req: any): boolean
     // let reqHost: string = req.host();
     // logger.info("Request from", headerOrigin, Date.now());
 
-    if(allowedOrigins.indexOf(headerOrigin) !== -1)
-        return true;
-    else return false;
+    // if(allowedOrigins.indexOf(headerOrigin) !== -1)
+    //     return true;
+    // else return false;
+    return true;
 }

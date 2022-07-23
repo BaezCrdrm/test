@@ -3,20 +3,53 @@ import { IFindData } from "../../../definitions";
 import { family_members as FamilyMembers, family_membersAttributes as familyMembersAttributes } from "../../../db/models/family_members";
 import { getErrorMessage } from "../../../utils/errorMessage";
 import { family as Family } from "../../../db/models/family";
-import { memberAttributes } from "../../../db/models/member";
+import { memberAttributes, member as Member } from "../../../db/models/member";
+import { FindOptions, Op, Includeable } from "sequelize";
+import { relation as Relation } from "../../../db/models/relation";
 
-export async function getAllFamilyMembers(familyId: string): Promise<IFindData<FamilyMembers[]>>
+export async function getAllFamilyMembers(familyId: string, search?: string): Promise<IFindData<FamilyMembers[]>>
 {
     let status = 200;
     try
     {
-        const resp = await FamilyMembers.findAll({
-            include: [{
-                model: Family,
-                as: "family"
-            }],
-            where: { family_id: familyId }
-        });
+        const filter: FindOptions = {
+            include: [
+                {
+                    model: Family,
+                    as: "family"
+                }
+            ],
+            where: { 
+                family_id: familyId
+            }
+        }
+
+        let memberInclude: Includeable = {
+            model: Member,
+            as: "member"
+        }
+
+        if(search)
+        {
+            memberInclude = {
+                ... memberInclude,
+                where: {
+                    description: {
+                        [Op.like]: `%${search.trim()}%`
+                    }
+                },
+                required: true,
+            }
+        }
+
+        if(!(filter && Array.isArray(filter.include))) 
+        {
+            logger.error("Get filter", filter);
+            throw new Error("Could not get filter");
+        }
+
+        filter.include.push(memberInclude);
+        const resp = await FamilyMembers.findAll(filter);
         logger.debug("Family members", resp);
 
         if(!resp)
@@ -53,13 +86,23 @@ export async function getFamilyMember(familyMemberId: string): Promise<IFindData
     try
     {
         const resp = await FamilyMembers.findOne({
-            include: [{
-                model: Family,
-                as: "family"
-            }],
+            include: [
+                {
+                    model: Family,
+                    as: "family"
+                },
+                {
+                    model: Member,
+                    as: "member"
+                },
+                {
+                    model: Relation,
+                    as: "relation"
+                }
+            ],
             where: { id: familyMemberId }
         });
-        logger.debug("Family members", resp);
+        logger.debug("Family members", resp?.toJSON());
 
         if(!resp)
         {

@@ -84,8 +84,9 @@ router.put("/:id", async(req, res) => {
 router.get("/:id/members", async(req, res) => {
     try
     {
+        const searchName: string | undefined = req.query.name as string;
         const id = req.params.id
-        const data: IFindData<unknown> = await getAllFamilyMembers(id);
+        const data: IFindData<unknown> = await getAllFamilyMembers(id, searchName);
         res.status(data.status).send(data.response);
     }
     catch(error)
