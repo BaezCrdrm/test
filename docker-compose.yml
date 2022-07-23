@@ -16,9 +16,25 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=familytree
 
-  # backend:
-  #   image: familytree
-  #   build: ./familytree
+  node:
+    image: familytreenode
+    build: ./backend-node
+    ports:
+      - 8080:8080
+    environment:
+      - APP_PORT=8080
+      - DB_HOST=db
+      - DB_USERNAME=admin
+      - DB_PASSWORD=adminpwd
+      - DB_DATABASE=familytree
+      - DB_DIALECT=mysql
+      - DB_PORT=3306
+    depends_on:
+      - db
+
+  # spring:
+  #   image: familytreespring
+  #   build: ./backend-spring
   #   ports:
   #     - 8080:8080
   #   depends_on:
@@ -26,14 +42,14 @@ services:
 
   # frontend:
   #   image: front
-  #   build: ./familytree-react
+  #   build: ./frontend
   #   ports:
   #     - 3000:3000
   #   volumes:
   #     - '.:/app'
   #     - '/app/node_modules'
   #   depends_on:
-  #     - backend
+  #     - node
 
 volumes:
   db-vol:
