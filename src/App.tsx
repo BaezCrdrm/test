@@ -5,12 +5,14 @@ import Card from "./components/form-card";
 import FormFamily from "./components/forms/family";
 import FormMember from "./components/forms/member";
 import FormRelation from "./components/forms/relation";
+import FormSelectFamily from "./components/forms/selectFamily";
 import SpeedDial from "./components/speeddial";
 import Tree from "./components/tree";
-import dataBuilder from "./components/tree/dataBuilder";
-import Store, { setRelations } from "./lib/manager";
+import Store, { setRelations, setMembers } from "./lib/manager";
 import { ITreeNode } from "./components/tree/definitions";
-import { getAllRelations } from "./lib/data";
+import { IFamily, IFamilyMember } from "./lib/data/definitions";
+import { getAllRelations, getFamilyMembers } from "./lib/data";
+import dataBuilder from "./components/tree/dataBuilder";
 
 interface ICardContent 
 {
@@ -18,8 +20,16 @@ interface ICardContent
   content: JSX.Element
 }
 
+const defaultSelected = {
+  id: "d5ca8bc3-49de-423d-a4e3-b8f1cc2ef600", 
+  name: "Baez", 
+  notes: "Familia Baez"
+}
+
 const App = () => {
   const [cardContent, setCardContent] = useState<ICardContent>();
+  const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(defaultSelected);
+  const [nodes, setNodes] = useState<ITreeNode[]>();
   const [relationsLoaded, setRelationsLoaded] = useState(false);
   const [data, setData] = useState<ITreeNode>();
 
@@ -50,6 +60,14 @@ const App = () => {
           content: <FormRelation onClose={onCardClose} />
         });
         break;
+      case 4:
+        setCardContent({
+          title: "Family",
+          content: <FormSelectFamily onSelect={setSelectedFamily} 
+            selectedFamily={selectedFamily}
+            onClose={onCardClose} />
+        });
+        break;
     
       default:
         cleanFormContent();
@@ -57,31 +75,44 @@ const App = () => {
     }
   }
 
-  useEffect(() => {
-    getAllRelations()
-      .then(rels => {
-        setRelations(rels)
-        setRelationsLoaded(Array.isArray(rels));
-      })
-      .catch(error => console.error);
-  }, []);
+  const loadInfo = async() => 
+  {
+    try
+    {
+      if(!(selectedFamily && selectedFamily.id)) return;
+      const promises = [
+        getFamilyMembers(selectedFamily.id),
+        getAllRelations()
+      ];
+
+      const [members, rels] = await Promise.all(promises);
+      setMembers(members as IFamilyMember[] || []);
+      setRelations(rels);
+
+      const data = await dataBuilder(Store.members as IFamilyMember[], Store.relations);
+      setNodes(data);
+    }
+    catch(error)
+    {
+      console.error("Load data", error);
+    }
+  }
 
   useEffect(() => {
-    console.log("Store", Store);
-    if(Store.relations.length > 0)
-    {
-      dataBuilder(Store.relations)
-        .then(setData)
-        .catch(error => console.error("Data builder", error));
-    }
-  }, [relationsLoaded]);
+    loadInfo();
+  }, [selectedFamily]);
 
   return (
     <div className="bg-blue-500 w-full h-screen">
       <div className="absolute w-full h-full bg-blue-500">
         {/* Área de árbol */}
-        <div className="absolute w-full h-full">
-          <Tree data={data} />
+        <div className="absolute w-full h-full bg-gray-900">
+          {
+            nodes ?
+              <Tree nodes={nodes} />
+              :
+              <div></div>
+          }
         </div>
 
         {

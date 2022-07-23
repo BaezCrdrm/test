@@ -37,12 +37,15 @@ export interface IFamilyMember
     unionDate: string | Date,
     family?: IFamily,
     member?: IMember,
-    relation?: IRelation
+    relation?: IRelation,
+    rel_parent_id?: string
 }
 
 export interface IRelation
 {
     id?: string,
-    familyMember1: IFamilyMember,
-    familyMember2: IFamilyMember
+    familyMember1?: IFamilyMember,
+    familyMember2?: IFamilyMember,
+    "first_member_id"?: string,
+    "second_member_id"?: string
 }

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, Fragment} from "react";
 import { TextField, Autocomplete as MaterialAutocomplete, CircularProgress } from "@mui/material";
 import { DataType, IMember } from "../../lib/data/definitions";
-import { searchMember, searchFamily, searchFamilyMember } from "../../lib/data";
+import { searchMember, searchFamily, getFamilyMembers } from "../../lib/data";
 
 interface IAutocompleteProps
 {
@@ -26,7 +26,7 @@ async function search(type: DataType, value: string, compId?: string)
             break;
             
             case "memberfamily":
-                return await searchFamilyMember(compId || "", value);
+                return await getFamilyMembers(compId || "", value);
             break;
         
             default:
@@ -104,9 +104,9 @@ const Autocomplete = (props: IAutocompleteProps) => {
     const select = (event: unknown, value: any, reason: unknown) => {
         if(props.onSelect)
         {
-            if(value.member)
-                props.onSelect(value.member);
-            else
+            // if(value.member)
+            //     props.onSelect(value.member);
+            // else
                 props.onSelect(value);
         }
     }

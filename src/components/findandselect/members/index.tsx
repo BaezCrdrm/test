@@ -37,12 +37,12 @@ const FindAndSelectMembers = (props: IFindAndSelectUserProps): JSX.Element => {
                         </div>
                         <div>
                             <span className="font-semibold">Birthday: </span>
-                            <span>{format(
+                            {/* <span>{format(
                                 typeof selected.birthday == "string" ? 
                                     new Date(selected.birthday) : 
                                     selected.birthday as Date, 
                                 "dd/MM/yyyy"
-                            )}</span>
+                            )}</span> */}
                         </div>
                     </div>
                     :

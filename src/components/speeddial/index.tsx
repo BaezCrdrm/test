@@ -6,6 +6,7 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 interface ISpeeddialProps
 {
@@ -15,7 +16,8 @@ interface ISpeeddialProps
 const actions = [
     { icon: <PersonIcon />, name: "New member", id: 1 },
     { icon: <GroupsIcon />, name: "New Family", id: 2 },
-    { icon: <ConnectWithoutContactIcon />, name: "Relate with", id: 3 }
+    { icon: <ConnectWithoutContactIcon />, name: "Relate with", id: 3 },
+    { icon: <HowToRegIcon />, name: "Select family", id: 4 }
   ];
 
 const SpeedDial = (props: ISpeeddialProps) => {
