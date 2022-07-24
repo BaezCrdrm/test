@@ -16,3 +16,5 @@ git submodule update
 ```bash
 docker-compose up --build -d
 ```
+
+Navegar a http://localhost:8081 (puerto especificado en `docker-compose.yml`.
