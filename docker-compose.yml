@@ -40,16 +40,16 @@ services:
   #   depends_on:
   #     - db
 
-  # frontend:
-  #   image: front
-  #   build: ./frontend
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - '.:/app'
-  #     - '/app/node_modules'
-  #   depends_on:
-  #     - node
+  frontend:
+    image: front
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    depends_on:
+      - node
 
 volumes:
   db-vol:
