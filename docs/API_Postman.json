@@ -133,7 +133,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "c382cc65-bcd0-4966-8b3b-43ca0744ca2a"
+									"value": "ba864492-338f-4066-b3d1-e960e978b73c"
 								}
 							]
 						}
@@ -147,6 +147,23 @@
 			"item": [
 				{
 					"name": "Get all family",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springhost}}/family",
+							"host": [
+								"{{springhost}}"
+							],
+							"path": [
+								"family"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get family by Id",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -326,7 +343,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{springhost}}/family/:familyId/members",
+							"raw": "{{springhost}}/family/:familyId/members?name=uel",
 							"host": [
 								"{{springhost}}"
 							],
@@ -335,10 +352,16 @@
 								":familyId",
 								"members"
 							],
+							"query": [
+								{
+									"key": "name",
+									"value": "uel"
+								}
+							],
 							"variable": [
 								{
 									"key": "familyId",
-									"value": "7b018889-e0d9-4013-92c0-377b90aca259"
+									"value": "d5ca8bc3-49de-423d-a4e3-b8f1cc2ef600"
 								}
 							]
 						}
@@ -448,7 +471,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"familyMember1\": {\n        \"id\": \"d92ca2ce-e935-4060-b64d-b93f97599b7a\"\n    },\n    \"familyMember2\": {\n        \"id\": \"a03e4126-2b8d-4b79-a060-6725575dd4f2\"\n    }\n}",
+							"raw": "{\n    \"familyMember1\": {\n        \"id\": \"4041a99b-c553-4144-859b-763b64b71955\"\n    },\n    \"familyMember2\": {\n        \"id\": \"71a5683e-be1c-4e89-8185-aba885efa328\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"

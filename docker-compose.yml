@@ -44,10 +44,7 @@ services:
     image: front
     build: ./frontend
     ports:
-      - 3000:3000
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - 8081:80
     depends_on:
       - node
 
