@@ -1,20 +1,16 @@
-# pull official base image
-FROM node:13.12.0-alpine
+FROM node:16-alpine as ts-compiler
 
-# set working directory
+RUN mkdir /app
 WORKDIR /app
+COPY . .
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+RUN npm install
+RUN npm run build
 
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
 
-# add app
-COPY . ./
+FROM nginx:1.13.12-alpine as main
 
-# start app
-CMD ["npm", "start"]
+COPY --from=ts-compiler /app/build /usr/share/nginx/html
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
