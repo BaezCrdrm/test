@@ -48,9 +48,12 @@ const FormMember = (props: IFormProps) => {
                 familyMember = await addToFamily(member, selectedFamily);
                 console.log("Member in family", familyMember);
 
-                const msg = "Member has been created";
-                console.log(msg, member);
-                alert(msg);
+                if(familyMember) 
+                {
+                    const msg = "Member has been created";
+                    console.log(msg, member);
+                    alert(msg);
+                }
             }
 
             if(selectedParent && familyMember)
@@ -70,6 +73,13 @@ const FormMember = (props: IFormProps) => {
                         alert(msg);
                     }
                 }
+            }
+
+            if(familyMember)
+            {
+                window.dispatchEvent(new CustomEvent("new_member_added", {
+                    detail: {member, familyMember}
+                }));
             }
 
             if(props.onClose)

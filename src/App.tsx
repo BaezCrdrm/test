@@ -8,7 +8,8 @@ import FormRelation from "./components/forms/relation";
 import FormSelectFamily from "./components/forms/selectFamily";
 import SpeedDial from "./components/speeddial";
 import Tree from "./components/tree";
-import Store, { setRelations, setMembers, setSelectedFamily as globalSelectedFamily } from "./lib/manager";
+import Store, { setRelations, setMembers, setSelectedFamily as globalSelectedFamily, 
+  addMember, addRelation, getRelations, getMembers } from "./lib/manager";
 import { ITreeNode } from "./components/tree/definitions";
 import { IFamily, IFamilyMember } from "./lib/data/definitions";
 import { getAllRelations, getFamilyMembers } from "./lib/data";
@@ -24,6 +25,7 @@ const App = () => {
   const [cardContent, setCardContent] = useState<ICardContent>();
   const [selectedFamily, setSelectedFamily] = useState<IFamily | undefined>(Store.selectedFamily);
   const [nodes, setNodes] = useState<ITreeNode[]>();
+  const [loaded, setLoaded] = useState(true);
 
   const cleanFormContent = () => setCardContent(undefined);
 
@@ -86,8 +88,7 @@ const App = () => {
       setMembers(members as IFamilyMember[] || []);
       setRelations(rels);
 
-      const data = await dataBuilder(Store.members as IFamilyMember[], Store.relations);
-      setNodes(data);
+      createNodes();
     }
     catch(error)
     {
@@ -95,9 +96,59 @@ const App = () => {
     }
   }
 
+  const createNodes = async() => {
+    try
+    {
+      const data = await dataBuilder(getMembers() as IFamilyMember[], getRelations());
+      console.log("New data", data);
+      setNodes(data);
+    }
+    catch(error)
+    {
+      console.error("createNodes", error);
+    }
+  }
+
+  const addFamilyMember = (data: any) => {
+    if(!(data && data.detail.familyMember)) return;
+    const fm = {
+      ... data.detail.familyMember,
+      member: data.detail.member
+    }
+    addMember(fm);
+    createNodes();
+    setLoaded(l => l = false);
+  }
+
+  const addNewRelation = (data: any) => {
+    if(!(data && data.detail.relation)) return;
+    addRelation(data.detail.relation);
+    createNodes();
+    setLoaded(l => l = false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("new_member_added", addFamilyMember);
+    window.addEventListener("new_relation_added", addNewRelation);
+
+    return () => {
+      window.removeEventListener("new_member_added", addFamilyMember);
+      window.removeEventListener("new_relation_added", addNewRelation);
+    }
+  }, []);
+
   useEffect(() => {
     loadInfo();
   }, [selectedFamily]);
+
+  useEffect(() => {
+    if(!loaded)
+    {
+      setTimeout(() => {
+        setLoaded(true);
+      }, 200);
+    }
+  }, [loaded]);
 
   return (
     <div className="bg-blue-500 w-full h-screen">
@@ -105,7 +156,7 @@ const App = () => {
         {/* Área de árbol */}
         <div className="absolute w-full h-full bg-gray-900">
           {
-            nodes ?
+            nodes && loaded ?
               <Tree nodes={nodes} />
               :
               <div></div>

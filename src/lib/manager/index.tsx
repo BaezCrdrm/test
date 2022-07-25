@@ -26,9 +26,37 @@ export function setMembers(members?: IMember[] | IFamilyMember[])
     Store.members = members || [];
 }
 
+export function getRelations()
+{
+    return Store.relations;
+}
+
+export function getMembers()
+{
+    return Store.members;
+}
+
 export function setSelectedFamily(family: IFamily)
 {
     Store.selectedFamily = family;
+}
+
+export function addRelation(relation: IRelation)
+{
+    const index = Store.relations.findIndex(r => r.id == relation.id);
+    if(index === -1)
+        Store.relations.push(relation);
+    else
+        Store.relations[index] = relation;
+}
+
+export function addMember(member: IMember | IFamilyMember)
+{
+    const index = Store.members.findIndex(m => m.id == member.id);
+    if(index === -1)
+        Store.members.push(member as any);
+    else
+        Store.members[index] = member;
 }
 
 export default Store;

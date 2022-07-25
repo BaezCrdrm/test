@@ -90,6 +90,9 @@ const FormRelation = (props: IFormProps) => {
             {
                 const msg = "Relation has been made";
                 console.log(msg, relation);
+                window.dispatchEvent(new CustomEvent("new_relation_added", {
+                    detail: {relation}
+                }));
                 alert(msg);
             }
 
